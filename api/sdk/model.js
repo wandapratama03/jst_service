@@ -1,4 +1,4 @@
-import { tensor2d, loadGraphModel } from '@tensorflow/tfjs-node';
+const tf = require('@tensorflow/tfjs-node');
 
 function normalized(data){ // i & r
     i = (data[0] - 12.585) / 6.813882
@@ -19,12 +19,12 @@ async function predict(data){
     data = normalized(data);
     shape = [1, in_dim];
 
-    tf_data = tensor2d(data, shape);
+    tf_data = tf.tensor2d(data, shape);
 
     try{
         // path load in public access => github
         const path = 'https://raw.githubusercontent.com/zendi014/trade_dnn/main/public/model_test/model.json';
-        const model = await loadGraphModel(path);
+        const model = await tf.loadGraphModel(path);
         
         predict = model.predict(
                 tf_data
@@ -37,4 +37,6 @@ async function predict(data){
     }
 }
 
-export const predict = predict;
+module.exports = {
+    predict: predict 
+}
